@@ -503,13 +503,22 @@ export default class Cluster<JobData = any, ReturnData = any> extends EventEmitt
         const pagesPerSecond = doneTargets === 0 ?
             '0' : (doneTargets * 1000 / timeDiff).toFixed(2);
 
+        const [working, idle] = this.workers.reduce(([working, idle], worker) => {
+            const isIdle = this.workersAvail.indexOf(worker) !== -1;
+            if (isIdle) {
+                return [working , idle + 1];
+            } else {
+                return [working + 1, idle];
+            }
+        }, [0, 0]);
+
         display.log(`== Start:     ${util.formatDateTime(this.startTime)}`);
         display.log(`== Now:       ${util.formatDateTime(now)} (running for ${timeRunning})`);
         display.log(`== Progress:  ${doneTargets} / ${this.allTargetCount} (${donePercStr}%)`
             + `, errors: ${this.errorCount} (${errorPerc}%)`);
         display.log(`== Remaining: ${timeRemining} (@ ${pagesPerSecond} pages/second)`);
         display.log(`== Sys. load: ${cpuUsage}% CPU / ${memoryUsage}% memory`);
-        display.log(`== Workers:   ${this.workers.length + this.workersStarting}`);
+        display.log(`== Workers:   ${this.workers.length + this.workersStarting}, working: ${working}, idle: ${idle}, starting: ${this.workersStarting}`);
 
         // this.workers.forEach((worker, i) => {
         //     const isIdle = this.workersAvail.indexOf(worker) !== -1;
