@@ -511,23 +511,23 @@ export default class Cluster<JobData = any, ReturnData = any> extends EventEmitt
         display.log(`== Sys. load: ${cpuUsage}% CPU / ${memoryUsage}% memory`);
         display.log(`== Workers:   ${this.workers.length + this.workersStarting}`);
 
-        this.workers.forEach((worker, i) => {
-            const isIdle = this.workersAvail.indexOf(worker) !== -1;
-            let workOrIdle;
-            let workerUrl = '';
-            if (isIdle) {
-                workOrIdle = 'IDLE';
-            } else {
-                workOrIdle = 'WORK';
-                if (worker.activeTarget) {
-                    workerUrl = worker.activeTarget.getUrl() || 'UNKNOWN TARGET';
-                } else {
-                    workerUrl = 'NO TARGET (should not be happening)';
-                }
-            }
+        // this.workers.forEach((worker, i) => {
+        //     const isIdle = this.workersAvail.indexOf(worker) !== -1;
+        //     let workOrIdle;
+        //     let workerUrl = '';
+        //     if (isIdle) {
+        //         workOrIdle = 'IDLE';
+        //     } else {
+        //         workOrIdle = 'WORK';
+        //         if (worker.activeTarget) {
+        //             workerUrl = worker.activeTarget.getUrl() || 'UNKNOWN TARGET';
+        //         } else {
+        //             workerUrl = 'NO TARGET (should not be happening)';
+        //         }
+        //     }
 
-            display.log(`   #${i} ${workOrIdle} ${workerUrl}`);
-        });
+        //     display.log(`   #${i} ${workOrIdle} ${workerUrl}`);
+        // });
         for (let i = 0; i < this.workersStarting; i += 1) {
             display.log(`   #${this.workers.length + i} STARTING...`);
         }
